@@ -16,7 +16,7 @@
         <module>itheima-leadnews-core-controller</module>
         <module>itheima-leadnews-core-feign</module>
     </modules>
-	 <dependencies>
+    <dependencies>
         <dependency>
             <groupId>com.itheima</groupId>
             <artifactId>itheima-leadnews-common</artifactId>

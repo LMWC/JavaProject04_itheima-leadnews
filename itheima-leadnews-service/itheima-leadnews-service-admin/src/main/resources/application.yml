@@ -1,0 +1,66 @@
+spring:
+  profiles:
+    active: dev
+---
+server:
+  port: 9001
+spring:
+  application:
+    name: leadnews-admin
+  profiles: dev
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.211.136:3306/leadnews_admin?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  cloud:
+    nacos:
+      server-addr: 192.168.211.136:8848
+      discovery:
+        server-addr: ${spring.cloud.nacos.server-addr}
+
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+logging:
+  level.com.itheima: debug
+---
+server:
+  port: 9001
+spring:
+  application:
+    name: leadnews-admin
+  profiles: pro
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.211.136:3306/leadnews_admin?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  cloud:
+    nacos:
+      server-addr: 192.168.211.136:8848
+      discovery:
+        server-addr: ${spring.cloud.nacos.server-addr}
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+---
+server:
+  port: 9001
+spring:
+  application:
+    name: leadnews-admin
+  profiles: test
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.211.136:3306/leadnews_admin?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  cloud:
+    nacos:
+      server-addr: 192.168.211.136:8848
+      discovery:
+        server-addr: ${spring.cloud.nacos.server-addr}
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml

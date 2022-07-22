@@ -22,6 +22,7 @@ public class Result<T> implements Serializable {
     @ApiModelProperty(notes = "响应结果逻辑数据", required = true)
     private T data;
 
+
     //成功 并不返回数据
     public static <T> Result<T> ok() {
         return new Result<T>(StatusCode.SUCCESS.message(), StatusCode.SUCCESS.code(), null);
@@ -96,7 +97,7 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-	 /**
+    /**
      * 是否操作成功 2000X 都是成功
      *
      */

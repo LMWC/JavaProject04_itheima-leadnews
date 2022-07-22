@@ -12,6 +12,35 @@
     <artifactId>itheima-leadnews-api</artifactId>
     <packaging>pom</packaging>
     <description>所有feign pojo所在父工程</description>
+    <modules>
+        <module>itheima-leadnews-admin-api</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.itheima</groupId>
+            <artifactId>itheima-leadnews-core-feign</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.itheima</groupId>
+            <artifactId>itheima-leadnews-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
 
 
 </project>

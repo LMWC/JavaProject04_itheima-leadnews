@@ -12,4 +12,7 @@
     <artifactId>itheima-leadnews-service</artifactId>
     <packaging>pom</packaging>
     <description>所有微服务所在服务工程</description>
+    <modules>
+        <module>itheima-leadnews-service-admin</module>
+    </modules>
 </project>
