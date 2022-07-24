@@ -11,5 +11,12 @@
 
     <artifactId>itheima-leadnews-core-feign</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+        </dependency>
+    </dependencies>
+
 
 </project>

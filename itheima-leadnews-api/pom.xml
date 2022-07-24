@@ -14,6 +14,9 @@
     <description>所有feign pojo所在父工程</description>
     <modules>
         <module>itheima-leadnews-admin-api</module>
+        <module>itheima-leadnews-user-api</module>
+        <module>itheima-leadnews-article-api</module>
+        <module>itheima-leadnews-wemedia-api</module>
     </modules>
 
     <dependencies>
