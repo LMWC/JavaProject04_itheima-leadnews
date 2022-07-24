@@ -1,0 +1,99 @@
+spring:
+  profiles:
+    active: dev
+---
+server:
+  port: 6001
+spring:
+  application:
+    name: leadnews-admin-gateway
+  profiles: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.211.136:8848
+    #      discovery:
+    #        server-addr: ${spring.cloud.nacos.server-addr}
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true  #增加
+        cors-configurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedHeaders: "*"
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000 # 这次跨域检测的有效期
+      routes:
+        # 路由规则的配置
+        - id: admin
+          uri: lb://leadnews-admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix= 1  # 去除前缀  1 表示去掉一个路径 2表示去掉两个路径
+---
+server:
+  port: 6001
+spring:
+  application:
+    name: leadnews-admin-gateway
+  profiles: test
+  cloud:
+    nacos:
+      server-addr: 192.168.211.136:8848
+      discovery:
+        server-addr: ${spring.cloud.nacos.server-addr}
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedHeaders: "*"
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      routes:
+        # 平台管理
+        - id: admin
+          uri: lb://leadnews-admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix= 1
+---
+server:
+  port: 6001
+spring:
+  application:
+    name: leadnews-admin-gateway
+  profiles: pro
+  cloud:
+    nacos:
+      server-addr: 192.168.211.136:8848
+      discovery:
+        server-addr: ${spring.cloud.nacos.server-addr}
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]': # 匹配所有请求
+            allowedOrigins: "*" #跨域处理 允许所有的域
+            allowedHeaders: "*"
+            allowedMethods: # 支持的方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      routes:
+        # 平台管理
+        - id: admin
+          uri: lb://leadnews-admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix= 1

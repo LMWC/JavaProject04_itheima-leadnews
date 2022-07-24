@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 频道信息表
+ * 标签信息表
  * </p>
  *
  * @author ljh
@@ -22,9 +22,9 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("ad_channel")
-@ApiModel(value="AdChannel", description="频道信息表")
-public class AdChannel implements Serializable {
+@TableName("ad_label")
+@ApiModel(value="AdLabel", description="标签信息表")
+public class AdLabel implements Serializable {
 
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -34,20 +34,9 @@ public class AdChannel implements Serializable {
     @TableField("name")
     private String name;
 
-    @ApiModelProperty(value = "频道描述")
-    @TableField("description")
-    private String description;
-
-    @ApiModelProperty(value = "是否默认频道")
-    @TableField("is_default")
-    private Integer isDefault;
-
-    @TableField("status")
-    private Integer status;
-
-    @ApiModelProperty(value = "默认排序")
-    @TableField("ord")
-    private Integer ord;
+    @ApiModelProperty(value = "0系统增加	            1人工增加")
+    @TableField("type")
+    private Integer type;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("created_time")

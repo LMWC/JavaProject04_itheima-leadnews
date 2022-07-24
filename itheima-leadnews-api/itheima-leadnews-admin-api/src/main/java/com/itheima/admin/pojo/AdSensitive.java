@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 频道信息表
+ * 敏感词信息表
  * </p>
  *
  * @author ljh
@@ -22,32 +22,18 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("ad_channel")
-@ApiModel(value="AdChannel", description="频道信息表")
-public class AdChannel implements Serializable {
+@TableName("ad_sensitive")
+@ApiModel(value="AdSensitive", description="敏感词信息表")
+public class AdSensitive implements Serializable {
 
 
+    @ApiModelProperty(value = "主键")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "频道名称")
-    @TableField("name")
-    private String name;
-
-    @ApiModelProperty(value = "频道描述")
-    @TableField("description")
-    private String description;
-
-    @ApiModelProperty(value = "是否默认频道")
-    @TableField("is_default")
-    private Integer isDefault;
-
-    @TableField("status")
-    private Integer status;
-
-    @ApiModelProperty(value = "默认排序")
-    @TableField("ord")
-    private Integer ord;
+    @ApiModelProperty(value = "敏感词")
+    @TableField("sensitives")
+    private String sensitives;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("created_time")

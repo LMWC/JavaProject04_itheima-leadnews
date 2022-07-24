@@ -17,9 +17,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.HashSet;
 
 @Configuration
-@EnableSwagger2
-@EnableKnife4j//开启knife4j
-@Import(BeanValidatorPluginsConfiguration.class)//导入配置
+@EnableSwagger2//启用swagger
+@EnableKnife4j//启用Knife4j
+@Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfiguration {
 
     @Bean
@@ -31,19 +31,20 @@ public class SwaggerConfiguration {
                 //设置返回数据类型
                 .produces(strings)
                 //分组名称
-//              .groupName("1.0")
+                //.groupName("1.0")
                 .select()
                 //这里指定Controller扫描包路径
                 .apis(RequestHandlerSelectors.basePackage("com.itheima.admin.controller"))
+                //**
                 .paths(PathSelectors.any())
                 .build();
         return docket;
     }
     private ApiInfo buildApiInfo() {
-        Contact contact = new Contact("黑马程序员","","");
+        Contact contact = new Contact("steven","","");
         return new ApiInfoBuilder()
-                .title("黑马头条-平台管理API文档")
-                .description("平台管理服务api")
+                .title("steven管理API文档")
+                .description("steven管理API文档")
                 .contact(contact)
                 .version("1.0.0").build();
     }

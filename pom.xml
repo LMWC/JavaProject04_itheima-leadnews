@@ -40,6 +40,11 @@
 
     <!--    这里做依赖的控制-->
     <dependencies>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -80,6 +85,7 @@
     <!--    这个标签下的东西都是只做版本控制 不做依赖-->
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>

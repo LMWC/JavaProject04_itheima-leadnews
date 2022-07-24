@@ -1,6 +1,5 @@
 package com.itheima.admin.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 频道信息表
+ * 推荐策略分组信息表
  * </p>
  *
  * @author ljh
@@ -22,32 +21,22 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("ad_channel")
-@ApiModel(value="AdChannel", description="频道信息表")
-public class AdChannel implements Serializable {
+@TableName("ad_strategy_group")
+@ApiModel(value="AdStrategyGroup", description="推荐策略分组信息表")
+public class AdStrategyGroup implements Serializable {
 
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @ApiModelProperty(value = "主键")
+    @TableId("id")
     private Integer id;
 
-    @ApiModelProperty(value = "频道名称")
+    @ApiModelProperty(value = "策略名称")
     @TableField("name")
     private String name;
 
-    @ApiModelProperty(value = "频道描述")
+    @ApiModelProperty(value = "策略描述")
     @TableField("description")
     private String description;
-
-    @ApiModelProperty(value = "是否默认频道")
-    @TableField("is_default")
-    private Integer isDefault;
-
-    @TableField("status")
-    private Integer status;
-
-    @ApiModelProperty(value = "默认排序")
-    @TableField("ord")
-    private Integer ord;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("created_time")
