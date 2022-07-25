@@ -1,7 +1,11 @@
 package com.itheima.media.service;
 
+import com.itheima.common.exception.LeadNewsException;
 import com.itheima.media.pojo.WmUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itheima.media.vo.LoginMediaVo;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WmUserService extends IService<WmUser> {
 
+
+    Map<String, Object> login(LoginMediaVo loginMediaVo) throws LeadNewsException;
 }

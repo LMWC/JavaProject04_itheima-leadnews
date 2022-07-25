@@ -3,19 +3,18 @@ spring:
     active: dev
 ---
 server:
-  port: 6001
+  port: 6002
 spring:
   application:
-    name: leadnews-admin-gateway
+    name: leadnews-media-gateway
   profiles: dev
   cloud:
     nacos:
       server-addr: 192.168.211.136:8848
-#      discovery:
-#        server-addr: ${spring.cloud.nacos.server-addr}
+      discovery:
+        server-addr: ${spring.cloud.nacos.server-addr}
     gateway:
       globalcors:
-        add-to-simple-url-handler-mapping: true  #增加
         cors-configurations:
           '[/**]': # 匹配所有请求
             allowedOrigins: "*" #跨域处理 允许所有的域
@@ -25,29 +24,27 @@ spring:
               - POST
               - PUT
               - DELETE
-            allowCredentials: true # 是否允许携带cookie
-            maxAge: 360000 # 这次跨域检测的有效期
       routes:
-        # 路由规则的配置
-        - id: admin
-          uri: lb://leadnews-admin
+        # 自媒体
+        - id: media
+          uri: lb://leadnews-wemedia
           predicates:
-            - Path=/admin/**
+            - Path=/media/**
           filters:
-            - StripPrefix= 1  # 去除前缀  1 表示去掉一个路径 2表示去掉两个路径
-        # 路由规则的配置
-        - id: user
-          uri: lb://leadnews-user
+            - StripPrefix= 1
+        # dfs微服务
+        - id: dfs
+          uri: lb://leadnews-dfs
           predicates:
-            - Path=/user/**
+            - Path=/dfs/**
           filters:
-            - StripPrefix= 1  # 去除前缀  1 表示去掉一个路径 2表示去掉两个路径
+            - StripPrefix= 1
 ---
 server:
-  port: 6001
+  port: 6002
 spring:
   application:
-    name: leadnews-admin-gateway
+    name: leadnews-media-gateway
   profiles: test
   cloud:
     nacos:
@@ -67,18 +64,24 @@ spring:
               - DELETE
       routes:
         # 平台管理
-        - id: admin
-          uri: lb://leadnews-admin
+        - id: media
+          uri: lb://leadnews-wemedia
           predicates:
-            - Path=/admin/**
+            - Path=/media/**
+          filters:
+            - StripPrefix= 1
+        - id: dfs
+          uri: lb://leadnews-dfs
+          predicates:
+            - Path=/dfs/**
           filters:
             - StripPrefix= 1
 ---
 server:
-  port: 6001
+  port: 6002
 spring:
   application:
-    name: leadnews-admin-gateway
+    name: leadnews-media-gateway
   profiles: pro
   cloud:
     nacos:
@@ -98,9 +101,15 @@ spring:
               - DELETE
       routes:
         # 平台管理
-        - id: admin
-          uri: lb://leadnews-admin
+        - id: media
+          uri: lb://leadnews-wemedia
           predicates:
-            - Path=/admin/**
+            - Path=/media/**
+          filters:
+            - StripPrefix= 1
+        - id: dfs
+          uri: lb://leadnews-dfs
+          predicates:
+            - Path=/dfs/**
           filters:
             - StripPrefix= 1

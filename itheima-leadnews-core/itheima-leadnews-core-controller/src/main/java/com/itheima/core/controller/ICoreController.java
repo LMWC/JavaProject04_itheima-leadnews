@@ -15,4 +15,17 @@ public interface ICoreController<T> extends
         IUpdateController<T> {
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

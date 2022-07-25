@@ -24,6 +24,7 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
 logging:
   level.com.itheima: debug
+
 ---
 server:
   port: 9001

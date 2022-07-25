@@ -22,30 +22,30 @@ import java.util.HashSet;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfiguration {
 
-    @Bean
-    public Docket buildDocket() {
-        HashSet<String> strings = new HashSet<>();
-        strings.add("application/json");
-        Docket docket=new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(buildApiInfo())
-                //设置返回数据类型
-                .produces(strings)
-                //分组名称
-                //.groupName("1.0")
-                .select()
-                //这里指定Controller扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.itheima.admin.controller"))
-                //**
-                .paths(PathSelectors.any())
-                .build();
-        return docket;
-    }
-    private ApiInfo buildApiInfo() {
-        Contact contact = new Contact("steven","","");
-        return new ApiInfoBuilder()
-                .title("steven管理API文档")
-                .description("steven管理API文档")
-                .contact(contact)
-                .version("1.0.0").build();
-    }
+   @Bean
+   public Docket buildDocket() {
+      HashSet<String> strings = new HashSet<>();
+      strings.add("application/json");
+      Docket docket=new Docket(DocumentationType.SWAGGER_2)
+              .apiInfo(buildApiInfo())
+              //设置返回数据类型
+              .produces(strings)
+              //分组名称
+              //.groupName("1.0")
+              .select()
+              //这里指定Controller扫描包路径
+              .apis(RequestHandlerSelectors.basePackage("com.itheima.admin.controller"))
+              //**
+              .paths(PathSelectors.any())
+              .build();
+      return docket;
+   }
+   private ApiInfo buildApiInfo() {
+      Contact contact = new Contact("steven","","");
+      return new ApiInfoBuilder()
+              .title("steven管理API文档")
+              .description("steven管理API文档")
+              .contact(contact)
+              .version("1.0.0").build();
+   }
 }

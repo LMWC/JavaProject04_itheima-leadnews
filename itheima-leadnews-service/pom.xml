@@ -14,9 +14,10 @@
     <description>所有微服务所在服务工程</description>
     <modules>
         <module>itheima-leadnews-service-admin</module>
-        <module>itheima-leadnews-service-article</module>
         <module>itheima-leadnews-service-user</module>
+        <module>itheima-leadnews-service-article</module>
         <module>itheima-leadnews-service-wemedia</module>
+        <module>itheima-leadnews-service-dfs</module>
     </modules>
     <dependencies>
         <dependency>

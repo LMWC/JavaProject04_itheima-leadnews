@@ -12,6 +12,7 @@
     <description>网关统一管理父工程</description>
     <modules>
         <module>itheima-leadnews-gateway-admin</module>
+        <module>itheima-leadnews-gateway-media</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -8,12 +8,12 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
 /**
- * @author ljh
- * @version 1.0
- * @date 2021/5/2 11:36
- * @description 标题
- * @package
- */
+* @author ljh
+* @version 1.0
+* @date 2021/5/2 11:36
+* @description 标题
+* @package
+*/
 @SpringBootApplication
 @MapperScan(basePackages = "com.itheima.admin.mapper")//扫描mapper接口所在的包即可
 @EnableDiscoveryClient//启用注册与发现

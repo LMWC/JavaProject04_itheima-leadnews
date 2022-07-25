@@ -8,4 +8,6 @@ public class SystemConstants {
     //JWT TOKEN无效
     public static final Integer JWT_FAIL = 0;
 
+    public static final String USER_HEADER_NAME = "userId";
+
 }

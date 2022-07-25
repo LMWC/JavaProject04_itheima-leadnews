@@ -97,7 +97,7 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    /**
+	 /**
      * 是否操作成功 2000X 都是成功
      *
      */

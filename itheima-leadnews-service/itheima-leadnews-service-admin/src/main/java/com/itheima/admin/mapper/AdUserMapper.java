@@ -2,6 +2,7 @@ package com.itheima.admin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.itheima.admin.pojo.AdUser;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>

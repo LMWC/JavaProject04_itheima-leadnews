@@ -3,12 +3,17 @@ package com.itheima.media.controller;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.itheima.common.exception.LeadNewsException;
+import com.itheima.common.pojo.Result;
 import com.itheima.media.pojo.WmUser;
 import com.itheima.media.service.WmUserService;
+import com.itheima.media.vo.LoginMediaVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import io.swagger.annotations.Api;
 import com.itheima.core.controller.AbstractCoreController;
+
+import java.util.Map;
 
 /**
 * <p>
@@ -39,6 +44,16 @@ public class WmUserController extends AbstractCoreController<WmUser>{
 
         return wmUserService.getOne(queryWrapper);
     }
+
+    //登录
+
+    @PostMapping("/login")
+    public Result<Map<String,Object>> login(@RequestBody LoginMediaVo loginMediaVo) throws LeadNewsException {
+        Map<String,Object> info = wmUserService.login(loginMediaVo);
+        return Result.ok(info);
+    }
+
+
 
 
 }

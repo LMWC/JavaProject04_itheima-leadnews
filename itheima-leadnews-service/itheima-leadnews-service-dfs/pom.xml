@@ -9,31 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>itheima-leadnews-service-admin</artifactId>
-
+    <artifactId>itheima-leadnews-service-dfs</artifactId>
     <dependencies>
+        <!--fastdfs-->
+        <dependency>
+            <groupId>com.github.tobato</groupId>
+            <artifactId>fastdfs-client</artifactId>
+            <version>1.26.5</version>
+        </dependency>
         <dependency>
             <groupId>com.itheima</groupId>
-            <artifactId>itheima-leadnews-common-db</artifactId>
+            <artifactId>itheima-leadnews-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.itheima</groupId>
-            <artifactId>itheima-leadnews-core-controller</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-
-
-        <dependency>
-            <groupId>com.itheima</groupId>
-            <artifactId>itheima-leadnews-admin-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-
     </dependencies>
-
 
 </project>

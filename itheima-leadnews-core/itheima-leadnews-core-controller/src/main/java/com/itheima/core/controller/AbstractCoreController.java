@@ -193,10 +193,10 @@ public abstract class AbstractCoreController<T> implements ICoreController<T> {
 
 
 
-    //获取分页对象
-    protected PageInfo<T> getPageInfo(IPage<T> iPage){
+   //获取分页对象
+   protected PageInfo<T> getPageInfo(IPage<T> iPage){
         return new PageInfo<T>(iPage.getCurrent(),iPage.getSize(),iPage.getTotal(),iPage.getPages(),iPage.getRecords());
-    }
+   }
 
 
 
