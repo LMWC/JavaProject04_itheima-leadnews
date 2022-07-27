@@ -39,6 +39,13 @@ spring:
             - Path=/dfs/**
           filters:
             - StripPrefix= 1
+        # 管理员
+        - id: admin
+          uri: lb://leadnews-admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix= 1
 ---
 server:
   port: 6002

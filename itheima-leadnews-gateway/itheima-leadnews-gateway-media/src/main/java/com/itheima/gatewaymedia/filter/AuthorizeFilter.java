@@ -11,9 +11,13 @@ package com.itheima.gatewaymedia.filter;
 //3.重写方法 实现自定义的业务逻辑
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.utils.StringUtils;
 import com.itheima.common.constants.SystemConstants;
 import com.itheima.common.util.AppJwtUtil;
+import com.itheima.common.util.au.JwtUtil;
+import com.itheima.common.util.au.TokenRole;
+import com.itheima.common.util.au.UserTokenInfoExp;
 import io.jsonwebtoken.Claims;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -24,6 +28,8 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.net.URLEncoder;
 
 @Component
 public class AuthorizeFilter implements GlobalFilter, Ordered {
@@ -39,12 +45,12 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
         ServerHttpResponse response = exchange.getResponse();
 
-        //2.判断当前的请求路径 如果是去自媒体用户登录 则放行
+        //2.判断当前的请求路径 如果是去自媒体用户登录 则放行 校验 增加一个
         String path = request.getURI().getPath();
-        if(path.startsWith("/media/wmUser/login")){
+        if(path.startsWith("/media/wmUser/login") || path.startsWith("/media/wmUser/refreshToken") ){
             return chain.filter(exchange);
         }
-        //3.获取请求头的内容 判断是否为null 如果null 则拦截 返回（401）
+        //3.获取请求头的内容 判断是否为null 如果null 则拦截 返回（401）   这个令牌 是短令牌（accesstoken）
         String token = request.getHeaders().getFirst("token");
         if(StringUtils.isEmpty(token)){
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
@@ -52,23 +58,31 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         }
 
 
-        //4.获取令牌信息进行校验 校验不成功 拦截 返回(401)
-        Integer code = AppJwtUtil.verifyToken(token);
-        if(code!= SystemConstants.JWT_OK){
+        //4.获取令牌信息进行解析
+        try {
+            //4.1 解析成功 令牌有效
+            UserTokenInfoExp userTokenInfoExp = JwtUtil.parseJwtUserToken(token);
+            //4.2 判断角色是否正确（网关是自媒体网关 来的令牌必须是自媒体）
+            if(!JwtUtil.isValidRole(userTokenInfoExp, TokenRole.ROLE_MEDIA)){
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                return response.setComplete();//响应回去
+            }
+            //4.3 判断是否过期  如果过期 返回403
+            if (JwtUtil.isExpire(userTokenInfoExp)) {
+                response.setStatusCode(HttpStatus.FORBIDDEN);
+                return response.setComplete();//响应回去
+            }
+
+            //4.4 成功了 将用户的令牌解析之后的所有的数据 放到请求头中  传递给下游  放行  默认是 iso8859-1
+            String encode = URLEncoder.encode(JSON.toJSONString(userTokenInfoExp), "utf-8");
+            request.mutate().header(SystemConstants.USER_HEADER_NAME,encode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            //4.2 解析失败 令牌有问题 直接报错
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return response.setComplete();//响应回去
         }
-
-        //在路由请求之前 将当前令牌中的用户的ID 解析出来 并[添加到请求头中 传递给下游]
-
-        Claims claimsBody = AppJwtUtil.getClaimsBody(token);
-        Object id = claimsBody.get("id");
-        String id1 = claimsBody.getId();
-        System.out.println(id);
-        System.out.println(id1);
-
-        request.mutate().header(SystemConstants.USER_HEADER_NAME,id.toString());
-        //5.放行
         return chain.filter(exchange);
     }
 

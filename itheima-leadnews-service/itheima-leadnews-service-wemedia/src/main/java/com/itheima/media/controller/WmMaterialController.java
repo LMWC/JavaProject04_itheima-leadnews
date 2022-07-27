@@ -53,9 +53,9 @@ public class WmMaterialController extends AbstractCoreController<WmMaterial> {
 
         //获取当前请求对象
 
-        String userId = RequestContextUtil.getUserInfo();
+        Integer userId = RequestContextUtil.getUserId();
         //获取请求头中的 内容
-        record.setUserId(Integer.parseInt(userId));
+        record.setUserId(userId);
         record.setType(0);
         record.setCreatedTime(LocalDateTime.now());
         record.setIsCollection(0);//默认不收藏

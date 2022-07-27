@@ -1,6 +1,7 @@
 package com.itheima.media.service;
 
 import com.itheima.common.exception.LeadNewsException;
+import com.itheima.common.util.au.TokenJsonVo;
 import com.itheima.media.pojo.WmUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itheima.media.vo.LoginMediaVo;
@@ -18,5 +19,6 @@ import java.util.Map;
 public interface WmUserService extends IService<WmUser> {
 
 
-    Map<String, Object> login(LoginMediaVo loginMediaVo) throws LeadNewsException;
+//    Map<String, Object> login(LoginMediaVo loginMediaVo) throws LeadNewsException;
+   TokenJsonVo login(LoginMediaVo loginMediaVo) throws LeadNewsException;
 }

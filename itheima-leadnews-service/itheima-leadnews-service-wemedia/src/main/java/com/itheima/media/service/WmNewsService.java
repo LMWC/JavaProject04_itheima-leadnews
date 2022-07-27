@@ -1,5 +1,9 @@
 package com.itheima.media.service;
 
+import com.itheima.common.pojo.PageInfo;
+import com.itheima.common.pojo.PageRequestDto;
+import com.itheima.media.dto.WmNewsDto;
+import com.itheima.media.dto.WmNewsDtoSave;
 import com.itheima.media.pojo.WmNews;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +17,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface WmNewsService extends IService<WmNews> {
 
+
+    PageInfo<WmNews> findByPageDto(PageRequestDto<WmNewsDto> pageRequestDto);
+
+
+    void save(WmNewsDtoSave wmNewsDtoSave, Integer isSubmit);
+
+
+    WmNewsDtoSave getDtoById(Integer id);
 }

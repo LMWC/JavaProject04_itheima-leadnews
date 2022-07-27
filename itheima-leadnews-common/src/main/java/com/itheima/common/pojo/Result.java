@@ -22,6 +22,8 @@ public class Result<T> implements Serializable {
     @ApiModelProperty(notes = "响应结果逻辑数据", required = true)
     private T data;
 
+    //get /set isSuccess
+
 
     //成功 并不返回数据
     public static <T> Result<T> ok() {
