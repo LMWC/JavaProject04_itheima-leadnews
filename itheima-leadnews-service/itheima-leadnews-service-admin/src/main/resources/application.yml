@@ -18,13 +18,15 @@ spring:
       server-addr: 192.168.211.136:8848
       discovery:
         server-addr: ${spring.cloud.nacos.server-addr}
-
 # 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
 logging:
   level.com.itheima: debug
-
+steven:
+  knife4j:
+    basePackage: com.itheima.admin.controller
+    title: 哈哈哈哈我的title
 ---
 server:
   port: 9001

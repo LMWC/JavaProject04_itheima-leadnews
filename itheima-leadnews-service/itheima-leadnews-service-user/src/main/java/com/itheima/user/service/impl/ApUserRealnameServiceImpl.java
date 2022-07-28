@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itheima.article.feign.ApAuthorFeign;
 import com.itheima.article.pojo.ApAuthor;
 import com.itheima.common.constants.BusinessConstants;
+import com.itheima.common.exception.LeadNewsException;
 import com.itheima.common.pojo.Result;
 import com.itheima.media.feign.WmUserFeign;
 import com.itheima.media.pojo.WmUser;
@@ -12,9 +13,11 @@ import com.itheima.user.mapper.ApUserRealnameMapper;
 import com.itheima.user.pojo.ApUser;
 import com.itheima.user.pojo.ApUserRealname;
 import com.itheima.user.service.ApUserRealnameService;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -45,6 +48,8 @@ public class ApUserRealnameServiceImpl extends ServiceImpl<ApUserRealnameMapper,
     //2.远程调用 4次 可以优化成2次
 
     @Override
+    @GlobalTransactional
+    @Transactional
     public void pass(Integer id) {
         //审核通过   update 表 set status=9 where id=?
 
@@ -80,6 +85,10 @@ public class ApUserRealnameServiceImpl extends ServiceImpl<ApUserRealnameMapper,
             //判断如果有这个账号了 查询如果有 则不创建 如果没有则创建账号
 
             Result<WmUser> result = wmUserFeign.save(wmUser);
+            if(!result.isSuccess()){
+                //失败了
+                throw new RuntimeException("异常");
+            }
             //创建自媒体之后 将自增的ID 返回出来
             wmUser = result.getData();
         }

@@ -88,6 +88,8 @@ public class WmUserController extends AbstractCoreController<WmUser>{
             return Result.errorMessage("刷新令牌（长令牌）也已经过期");
         }
         TokenJsonVo token = JwtUtil.createToken(userTokenInfoExp);
+
+
         return Result.ok(token);
     }
 

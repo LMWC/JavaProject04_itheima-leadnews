@@ -1,0 +1,42 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.itheima.core.knif4j.MyKnife4jProperties",
+      "name": "steven.knife4j",
+      "type": "com.itheima.core.knif4j.MyKnife4jProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.itheima.core.knif4j.MyKnife4jProperties",
+      "name": "steven.knife4j.basePackage",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.itheima.core.knif4j.MyKnife4jProperties",
+      "name": "steven.knife4j.description",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.itheima.core.knif4j.MyKnife4jProperties",
+      "name": "steven.knife4j.title",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.itheima.core.knif4j.MyKnife4jProperties",
+      "name": "steven.knife4j.contact",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.itheima.core.knif4j.MyKnife4jProperties",
+      "name": "steven.knife4j.version",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.itheima.core.knif4j.MyKnife4jProperties",
+      "name": "steven.knife4j.serviceUrl",
+      "type": "java.lang.String"
+    }
+  ]
+}

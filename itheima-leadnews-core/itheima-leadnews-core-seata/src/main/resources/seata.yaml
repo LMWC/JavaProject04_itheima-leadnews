@@ -1,0 +1,7 @@
+seata:
+  tx-service-group: seata-toutiao
+  service:
+    vgroup-mapping: # 事务组与cluster的映射关系
+      seata-toutiao: DEFAULT
+    grouplist:
+      DEFAULT: 192.168.211.136:8091

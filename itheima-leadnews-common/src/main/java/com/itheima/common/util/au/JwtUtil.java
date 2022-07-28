@@ -42,7 +42,7 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, key)
                 .setExpiration(accessDate)
                 .compact();
-
+        System.out.println("刷新令牌的时间："+refreshDate.getTime());
 
         //刷新令牌
         String refreshToken = Jwts.builder()
@@ -102,6 +102,7 @@ public class JwtUtil {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
             body = claimsJws.getBody();
+            System.out.println(body);
         } catch (ExpiredJwtException e) {
             //照样获取数据
             e.printStackTrace();
@@ -126,6 +127,24 @@ public class JwtUtil {
 
         return tokenInfoExp;
     }
+
+    public static void main(String[] args) throws Exception{
+        UserTokenInfo userinfo = UserTokenInfo.getAnonymous();
+        TokenJsonVo token = JwtUtil.createToken(userinfo);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        UserTokenInfoExp userTokenInfoExp1 = JwtUtil.parseJwtUserToken(token.getRefreshToken());
+        TokenJsonVo token1 = JwtUtil.createToken(userTokenInfoExp1);
+        System.out.println(token1);
+
+
+    }
+
 
 
 }

@@ -4,6 +4,8 @@ import com.github.tobato.fastdfs.domain.conn.FdfsWebServer;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.itheima.common.pojo.Result;
+import com.itheima.common.util.GreenImageScan;
+import com.itheima.common.util.GreenTextScan;
 import com.itheima.dfs.pojo.BaseFileModel;
 import com.itheima.dfs.pojo.DFSType;
 import com.itheima.dfs.service.IFileService;
@@ -20,7 +22,9 @@ import java.beans.ExceptionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -73,6 +77,12 @@ public class FileController {
     @Value("${fdfs.type}")
     private String type;
 
+    @Autowired
+    private GreenImageScan greenImageScan;
+
+    @Autowired
+    private GreenTextScan greenTextScan;
+
     @PostMapping("/upload")
     public Result<Map<String,String>>  upload(MultipartFile file) throws Exception {
         //这个是要上传的文件的封装对象 fastdfs
@@ -83,6 +93,20 @@ public class FileController {
                 file.getBytes()//文件本身
         );
         IFileService iFleService = strategyContext.getIFleService(DFSType.valueOf(type));
+
+        //测试
+        List<byte[]> arr = new ArrayList<>();
+        arr.add(file.getBytes());//图片本身
+        Map map1 = greenImageScan.imageScan(arr);
+        System.out.println(map1);
+        //
+        System.out.println("==========================");
+        List<String> contents = new ArrayList<>();
+        contents.add("海洛因");
+        Map map2 = greenTextScan.greeTextScan(contents);
+        System.out.println(map2);
+
+
         String url = iFleService.uploadFile(fileModel);
         Map<String,String> map = new HashMap<>();
         map.put("url",url);
