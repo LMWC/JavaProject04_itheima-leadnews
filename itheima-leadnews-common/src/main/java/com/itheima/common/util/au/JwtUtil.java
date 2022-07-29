@@ -15,7 +15,7 @@ public class JwtUtil {
     private static final byte[] key = "MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY".getBytes();
 
     //过期时间单位为 秒
-    public static final int TOKEN_TIME_OUT = 30;
+    public static final int TOKEN_TIME_OUT = 7200;
 
 
     /**

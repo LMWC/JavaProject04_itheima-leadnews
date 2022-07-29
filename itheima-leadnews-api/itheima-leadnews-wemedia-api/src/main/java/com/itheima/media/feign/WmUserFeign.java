@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
  * 4.声明返回的数据类型是什么？
  *
  */
-@FeignClient(name="leadnews-wemedia",path = "/wmUser")//name=服务名 将来请求发送给他
+//contextId 就是表名
+@FeignClient(name="leadnews-wemedia",path = "/wmUser",contextId = "wmUser")//name=服务名 将来请求发送给他
 
 public interface WmUserFeign extends CoreFeign<WmUser> {
 

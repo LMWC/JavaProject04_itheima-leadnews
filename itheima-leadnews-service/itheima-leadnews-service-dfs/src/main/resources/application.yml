@@ -27,7 +27,7 @@ fdfs:
   tracker-list:
     - 192.168.211.136:22122 #TrackerList参数,支持多个
   web-server-url: http://192.168.211.136/  # 设置前缀路径
-  type: OSSDFS
+  type: FASTDFS
 logging:
   level.com: debug
 

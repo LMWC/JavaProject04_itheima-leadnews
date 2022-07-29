@@ -17,6 +17,7 @@
         <module>itheima-leadnews-user-api</module>
         <module>itheima-leadnews-article-api</module>
         <module>itheima-leadnews-wemedia-api</module>
+        <module>itheima-leadnews-dfs-api</module>
     </modules>
 
     <dependencies>

@@ -1,5 +1,6 @@
 package com.itheima.article.service;
 
+import com.itheima.article.dto.ArticleInfoDto;
 import com.itheima.article.pojo.ApArticle;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ApArticleService extends IService<ApArticle> {
 
+
+    ApArticle saveArticle(ArticleInfoDto dto);
 }

@@ -13,4 +13,6 @@ import com.itheima.admin.pojo.AdArticleStatistics;
  */
 public interface AdArticleStatisticsMapper extends BaseMapper<AdArticleStatistics> {
 
+
+
 }

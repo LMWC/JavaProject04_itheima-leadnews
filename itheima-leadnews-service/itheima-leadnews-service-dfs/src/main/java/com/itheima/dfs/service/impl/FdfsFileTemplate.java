@@ -3,6 +3,7 @@ package com.itheima.dfs.service.impl;
 import com.github.tobato.fastdfs.domain.conn.FdfsWebServer;
 import com.github.tobato.fastdfs.domain.fdfs.MetaData;
 import com.github.tobato.fastdfs.domain.fdfs.StorePath;
+import com.github.tobato.fastdfs.domain.proto.storage.DownloadCallback;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.itheima.dfs.pojo.BaseFileModel;
 import com.itheima.dfs.pojo.DFSType;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,12 +68,38 @@ public class FdfsFileTemplate extends AbstractDfsTemplate {
         return true;
     }
 
+    //["",""]
     @Override
     public List<byte[]> download(List<String> fullPaths) {
+        List<byte[]> bytesList = new ArrayList<>();
 
+        for (String fullPath : fullPaths) {// http://192.168.211.136/group1/M00/
 
+            StorePath storePath = StorePath.parseFromUrl(fullPath);
 
+            //一张图片
+            byte[] bytes = null;
+            try {
+                bytes = client.downloadFile(
+                        storePath.getGroup(),
+                        storePath.getPath(),
+                        new DownloadCallback<byte[]>() {
+                            @Override
+                            public byte[] recv(InputStream ins) throws IOException {
+                                return IOUtils.toByteArray(ins);
+                            }
+                        }
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(bytes!=null) {
+                bytesList.add(bytes);
+            }
+        }
+        return bytesList;
 
+/*
         List<byte[]> picList = fullPaths.stream().map(
                 fullpath -> {
                     try {
@@ -81,8 +111,8 @@ public class FdfsFileTemplate extends AbstractDfsTemplate {
                         return null;
                     }
                 }
-        ).filter(bytes -> bytes != null).collect(Collectors.toList());
-        return picList;
+        ).filter(bytes -> bytes != null).collect(Collectors.toList());  return picList;*/
+
     }
 
     @Override

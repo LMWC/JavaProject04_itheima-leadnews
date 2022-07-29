@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -111,5 +112,14 @@ public class FileController {
         Map<String,String> map = new HashMap<>();
         map.put("url",url);
         return Result.ok(map);
+    }
+
+    @PostMapping("/downLoad")
+    public List<byte[]> downLoad(@RequestBody List<String> urls){
+        IFileService iFleService = strategyContext.getIFleService(DFSType.valueOf(type));
+        //fullPath  http://192.168.211.136/group1/M00/00/00/WOIEUROWUROW.jpg
+
+        List<byte[]> bytes = iFleService.download(urls);
+        return bytes;
     }
 }

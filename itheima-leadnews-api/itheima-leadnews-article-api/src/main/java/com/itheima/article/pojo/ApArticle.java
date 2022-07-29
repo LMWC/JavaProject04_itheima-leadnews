@@ -26,7 +26,7 @@ import lombok.EqualsAndHashCode;
 public class ApArticle implements Serializable {
 
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ID_WORKER)//使用的是雪花算法的策略来生成ID
     private Long id;
 
     @ApiModelProperty(value = "标题")

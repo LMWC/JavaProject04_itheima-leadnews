@@ -17,7 +17,28 @@ public interface BusinessConstants {
 
 
     //业务2
+    public static class MqConstants {
+        /**
+         * 文章自动审核
+         */
+        public static final String WM_NEWS_AUTO_SCAN_TOPIC = "wm.news.auto.scan.topic";
 
+    }
 
     //业务3
+    public static class ScanConstants{
+        /**
+         * 通过
+         */
+        public static final String PASS = "pass";
+        /**
+         * 拒绝
+         */
+        public static final String BLOCK="block";
+        /**
+         * 不确定
+         */
+        public static final String REVIEW="review";
+
+    }
 }

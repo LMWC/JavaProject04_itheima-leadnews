@@ -24,6 +24,9 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
   type-aliases-package: com.itheima.article.pojo
+  global-config:
+    datacenter-id: 1
+    worker-id: 1
 ---
 server:
   port: 9003

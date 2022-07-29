@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name="leadnews-article",path = "/apAuthor")
+@FeignClient(name="leadnews-article",path = "/apAuthor",contextId = "apAuthor")
 public interface ApAuthorFeign extends CoreFeign<ApAuthor> {
 
     //创建作者
@@ -18,4 +18,8 @@ public interface ApAuthorFeign extends CoreFeign<ApAuthor> {
 
     @GetMapping("/one/{apUserId}")
     public ApAuthor getByApUserId(@PathVariable(name="apUserId")Integer apUserId);
+
+    //根据wm_user_id 获取作者
+    @GetMapping("/author/{wmUserId}")
+    public ApAuthor getByWmUserId(@PathVariable(name="wmUserId") Integer wmUserId);
 }

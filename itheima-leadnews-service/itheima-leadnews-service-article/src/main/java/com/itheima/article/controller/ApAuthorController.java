@@ -40,5 +40,12 @@ public class ApAuthorController extends AbstractCoreController<ApAuthor> {
         return apAuthorService.getOne(queryWrapper);
     }
 
+    @GetMapping("/author/{wmUserId}")
+    public ApAuthor getByWmUserId(@PathVariable(name="wmUserId") Integer wmUserId){
+        QueryWrapper<ApAuthor> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("wm_user_id",wmUserId);
+        return apAuthorService.getOne(queryWrapper);
+    }
+
 }
 

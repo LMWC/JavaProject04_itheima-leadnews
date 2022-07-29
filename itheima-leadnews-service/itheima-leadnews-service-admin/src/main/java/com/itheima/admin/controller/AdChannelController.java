@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
 * <p>
 * 频道信息表 控制器</p>
@@ -32,7 +34,7 @@ public class AdChannelController extends AbstractCoreController<AdChannel> {
     }
 
     @GetMapping("/test")
-    public Result test(){
+    public Result test(HttpServletRequest req){
         int i=1/0;
         return Result.ok();
     }

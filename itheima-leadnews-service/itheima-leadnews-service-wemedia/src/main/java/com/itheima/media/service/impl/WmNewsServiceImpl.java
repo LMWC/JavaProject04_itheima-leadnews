@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.itheima.common.constants.BusinessConstants;
 import com.itheima.common.pojo.PageInfo;
 import com.itheima.common.pojo.PageRequestDto;
 import com.itheima.common.util.RequestContextUtil;
@@ -18,8 +19,10 @@ import com.itheima.media.pojo.WmUser;
 import com.itheima.media.service.WmNewsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.tomcat.jni.Local;
+import org.hibernate.validator.constraints.ISBN;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -92,6 +95,9 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
                 pageResult.getRecords());
     }
 
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
+
     @Override
     public void save(WmNewsDtoSave wmNewsDtoSave, Integer isSubmit) {
         //这里实现保存草稿和提交审核的代码
@@ -146,10 +152,16 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         wmNews.setEnable(0);
 
         //3.执行insert/update
+        Integer count=0;
         if(wmNewsDtoSave.getId()==null){
-            wmNewsMapper.insert(wmNews);
+            count =wmNewsMapper.insert(wmNews);
         }else{
-            wmNewsMapper.updateById(wmNews);
+            count = wmNewsMapper.updateById(wmNews);
+        }
+
+        //发送消息
+        if(isSubmit==1 && count>0){
+            kafkaTemplate.send(BusinessConstants.MqConstants.WM_NEWS_AUTO_SCAN_TOPIC,wmNews.getId()+"");
         }
 
 
