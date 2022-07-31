@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.media.mapper.WmNewsMapper">
+
+    <select id="selectMyPage" resultType="com.itheima.media.vo.WmNewsVo" parameterType="map">
+    select wmn.*,wmu.name as authorName from wm_news wmn left join wm_user wmu on wmn.user_id= wmu.id
+    <where>
+    <if test="title!=null and title!=''">
+        and wmn.title like #{title}
+    </if>
+
+        and wmn.status in (2,3)
+    </where>
+
+    limit #{start},#{size}
+    </select>
+    <select id="selectMyCount" resultType="java.lang.Long" parameterType="string">
+        select count(*) from wm_news wmn left join wm_user wmu on wmn.user_id= wmu.id
+        <where>
+            <if test="title!=null and title!=''">
+                and wmn.title like #{title}
+            </if>
+
+            and wmn.status in (2,3)
+        </where>
+    </select>
+</mapper>

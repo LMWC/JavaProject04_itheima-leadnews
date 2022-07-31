@@ -18,6 +18,7 @@ import com.itheima.media.mapper.WmNewsMapper;
 import com.itheima.media.pojo.WmUser;
 import com.itheima.media.service.WmNewsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.itheima.media.vo.WmNewsVo;
 import org.apache.tomcat.jni.Local;
 import org.hibernate.validator.constraints.ISBN;
 import org.springframework.beans.BeanUtils;
@@ -126,7 +127,7 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
             List<String> images = wmNewsDtoSave.getImages();
 
             //页面传递过来了（一定不能选择 自动）
-            if(images!=null && images.size()>0) {
+            if (images != null && images.size() > 0) {
                 wmNews.setImages(String.join(",", images));
             }
         }
@@ -138,11 +139,11 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         wmNews.setUserId(RequestContextUtil.getUserId());
 
         //2.5 设置创建时间（只有insert的时候才会添加这个时间）
-        if(wmNewsDtoSave.getId()==null){
+        if (wmNewsDtoSave.getId() == null) {
             wmNews.setCreatedTime(LocalDateTime.now());
         }
         //2.6设置提交的时间
-        if(isSubmit==1) {
+        if (isSubmit == 1) {
             wmNews.setSubmitedTime(LocalDateTime.now());
         }
         //2.7 设置状态
@@ -152,16 +153,16 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         wmNews.setEnable(0);
 
         //3.执行insert/update
-        Integer count=0;
-        if(wmNewsDtoSave.getId()==null){
-            count =wmNewsMapper.insert(wmNews);
-        }else{
+        Integer count = 0;
+        if (wmNewsDtoSave.getId() == null) {
+            count = wmNewsMapper.insert(wmNews);
+        } else {
             count = wmNewsMapper.updateById(wmNews);
         }
 
         //发送消息
-        if(isSubmit==1 && count>0){
-            kafkaTemplate.send(BusinessConstants.MqConstants.WM_NEWS_AUTO_SCAN_TOPIC,wmNews.getId()+"");
+        if (isSubmit == 1 && count > 0) {
+            kafkaTemplate.send(BusinessConstants.MqConstants.WM_NEWS_AUTO_SCAN_TOPIC, wmNews.getId() + "");
         }
 
 
@@ -171,16 +172,16 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
     public WmNewsDtoSave getDtoById(Integer id) {
         WmNews wmNews = wmNewsMapper.selectById(id);
 
-        if(wmNews!=null){
+        if (wmNews != null) {
             WmNewsDtoSave wmNewsDtoSave = new WmNewsDtoSave();
-            BeanUtils.copyProperties(wmNews,wmNewsDtoSave);
+            BeanUtils.copyProperties(wmNews, wmNewsDtoSave);
             //设置内容
             String content = wmNews.getContent();
             List<ContentNode> contentNodes = JSON.parseArray(content, ContentNode.class);
             wmNewsDtoSave.setContent(contentNodes);
             //设置图片
             String images = wmNews.getImages();
-            if(!StringUtils.isEmpty(images)){
+            if (!StringUtils.isEmpty(images)) {
                 //设置图片列表
                 wmNewsDtoSave.setImages(Arrays.asList(images.split(",")));
             }
@@ -198,4 +199,44 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         }
         return images;
     }
+
+    @Override
+    public PageInfo<WmNewsVo> searchByCondition(PageRequestDto<WmNews> requestDto) {
+
+        /**
+         * select wmn.*,wmu.name as authorName from wm_news wmn left join wm_user wmu on wmn.user_id= wmu.id
+         *  where wmn.status in (2,3) and wmn.title like '%黑%'
+         *   limit 0,10
+         *
+         *   page-1 * size
+         */
+        //1.获取从页面传递过来的当前的页码和每页显示的行
+        Long page = requestDto.getPage();
+        Long size = requestDto.getSize();
+        //2.获取到页面传递过来的参数条件对应的请求体对象
+        WmNews body = requestDto.getBody();
+        String title = "";
+        if (body != null) {
+            if (!StringUtils.isEmpty(body.getTitle())) {
+                title = "%" + body.getTitle() + "%";
+            }
+        }
+        Long start = (page - 1) * size;
+        //3.执行分页查询（不能用mybatisplus）获取当前的页的数据集合
+        List<WmNewsVo> wmNewsVos = wmNewsMapper.selectMyPage(title, start, size);
+        //4.执行统计查询该条件下的所有的总记录数
+        Long total = wmNewsMapper.selectMyCount(title);
+        //5.计算出总页数 封装到对象中返回
+        Long totalPages = total % size > 0 ? total / size + 1 : total / size;
+
+        return new PageInfo<WmNewsVo>(
+                page,
+                size,
+                total,
+                totalPages,
+                wmNewsVos
+        );
+    }
+
+
 }

@@ -100,56 +100,61 @@ public class WemediaNewsAutoScanServiceImpl implements WemediaNewsAutoScanServic
                 }
             }
             if (flag) {
-                // 2.6 保存文章信息到 article库中  需要保存3张表的数据
-                ArticleInfoDto dto = new ArticleInfoDto();
-
-                //2.6.1 设置文章对象
-                ApArticle article = new ApArticle();
-                article.setTitle(wmNews.getTitle());
-                //authorid
-                ApAuthor apAuthor = apAuthorFeign.getByWmUserId(wmNews.getUserId());
-                if(apAuthor!=null) {
-                    article.setAuthorId(apAuthor.getId());
-                    article.setAuthorName(apAuthor.getName());
-                }
-
-                article.setChannelId(wmNews.getChannelId());
-                AdChannel adChannel = adChannelMapper.selectById(wmNews.getChannelId());
-                article.setChannelName(adChannel.getName());
-
-
-                article.setLayout(wmNews.getType());
-                article.setFlag(0);//普通
-
-                article.setImages(wmNews.getImages());
-                article.setLabels(wmNews.getLabels());
-                article.setCreatedTime(LocalDateTime.now());
-                article.setPublishTime(LocalDateTime.now());
-                dto.setApArticle(article);
-                //2.6.2 设置文章配置对象
-                ApArticleConfig articleConfig = new ApArticleConfig();
-                articleConfig.setIsComment(1);
-                articleConfig.setIsForward(1);
-                articleConfig.setIsDown(0);//没有下架
-                articleConfig.setIsDelete(0);//没有删除 逻辑删除
-
-                dto.setApArticleConfig(articleConfig);
-                //2.6.3 设置文章内容对象
-                ApArticleContent articleContent = new ApArticleContent();
-                articleContent.setContent(wmNews.getContent());
-                dto.setApArticleContent(articleContent);
-
-                Result<ApArticle> resultArticle = apArticleFeign.save(dto);
-                ApArticle datafromArticle = resultArticle.getData();
-                Long articleId = datafromArticle.getId();
-                WmNews record = new WmNews();
-                record.setId(wmNews.getId());
-                record.setArticleId(articleId);
-                // 2.7 调用feign更新文章的ID 到自媒体文章表中
-                wmNewsFeign.updateByPrimaryKey(record);//update wm_news set article_id=? where id=?
-
+                createArticleInfoData(wmNews);
             }
         }
+    }
+
+    @Override
+    public void createArticleInfoData(WmNews wmNews){
+        // 2.6 保存文章信息到 article库中  需要保存3张表的数据
+        ArticleInfoDto dto = new ArticleInfoDto();
+
+        //2.6.1 设置文章对象
+        ApArticle article = new ApArticle();
+        article.setTitle(wmNews.getTitle());
+        //authorid
+        ApAuthor apAuthor = apAuthorFeign.getByWmUserId(wmNews.getUserId());
+        if(apAuthor!=null) {
+            article.setAuthorId(apAuthor.getId());
+            article.setAuthorName(apAuthor.getName());
+        }
+
+        article.setChannelId(wmNews.getChannelId());
+        AdChannel adChannel = adChannelMapper.selectById(wmNews.getChannelId());
+        article.setChannelName(adChannel.getName());
+
+
+        article.setLayout(wmNews.getType());
+        article.setFlag(0);//普通
+
+        article.setImages(wmNews.getImages());
+        article.setLabels(wmNews.getLabels());
+        article.setCreatedTime(LocalDateTime.now());
+        article.setPublishTime(LocalDateTime.now());
+        dto.setApArticle(article);
+        //2.6.2 设置文章配置对象
+        ApArticleConfig articleConfig = new ApArticleConfig();
+        articleConfig.setIsComment(1);
+        articleConfig.setIsForward(1);
+        articleConfig.setIsDown(0);//没有下架
+        articleConfig.setIsDelete(0);//没有删除 逻辑删除
+
+        dto.setApArticleConfig(articleConfig);
+        //2.6.3 设置文章内容对象
+        ApArticleContent articleContent = new ApArticleContent();
+        articleContent.setContent(wmNews.getContent());
+        dto.setApArticleContent(articleContent);
+
+        Result<ApArticle> resultArticle = apArticleFeign.save(dto);
+        ApArticle datafromArticle = resultArticle.getData();
+        Long articleId = datafromArticle.getId();
+        WmNews record = new WmNews();
+        record.setId(wmNews.getId());
+        record.setArticleId(articleId);
+        // 2.7 调用feign更新文章的ID 到自媒体文章表中
+        wmNewsFeign.updateByPrimaryKey(record);//update wm_news set article_id=? where id=?
+
     }
 
 

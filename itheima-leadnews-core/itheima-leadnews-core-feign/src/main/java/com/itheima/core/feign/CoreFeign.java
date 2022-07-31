@@ -41,7 +41,7 @@ public interface CoreFeign<T> {
 
     /**
      * 根据等号条进行查询调用
-     * @param record
+     * @param record {status=8}
      * @return
      */
     @PostMapping("/listCondition")

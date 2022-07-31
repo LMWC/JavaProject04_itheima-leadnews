@@ -42,6 +42,13 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix= 1  # 去除前缀  1 表示去掉一个路径 2表示去掉两个路径
+        # 路由规则的配置
+        - id: media
+          uri: lb://leadnews-wemedia
+          predicates:
+            - Path=/media/**
+          filters:
+            - StripPrefix= 1  # 去除前缀  1 表示去掉一个路径 2表示去掉两个路径
 ---
 server:
   port: 6001

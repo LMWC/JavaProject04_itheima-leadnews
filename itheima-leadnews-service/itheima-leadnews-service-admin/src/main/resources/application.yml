@@ -37,6 +37,16 @@ steven:
   knife4j:
     basePackage: com.itheima.admin.controller
     title: 哈哈哈哈我的title
+xxl:
+  job:
+    accessToken: ''
+    admin:
+      addresses: http://192.168.211.136:8080/xxl-job-admin
+    executor:
+      appname: leadnews-admin
+      ip: ''
+      logretentiondays: 30
+      port: -1
 ---
 server:
   port: 9001

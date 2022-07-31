@@ -6,6 +6,7 @@ import com.itheima.media.dto.WmNewsDto;
 import com.itheima.media.dto.WmNewsDtoSave;
 import com.itheima.media.pojo.WmNews;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itheima.media.vo.WmNewsVo;
 
 /**
  * <p>
@@ -25,4 +26,7 @@ public interface WmNewsService extends IService<WmNews> {
 
 
     WmNewsDtoSave getDtoById(Integer id);
+
+
+    PageInfo<WmNewsVo> searchByCondition(PageRequestDto<WmNews> requestDto);
 }
