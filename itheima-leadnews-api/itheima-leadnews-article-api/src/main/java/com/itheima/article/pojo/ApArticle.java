@@ -6,6 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.itheima.common.util.Long2StringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -27,6 +31,8 @@ public class ApArticle implements Serializable {
 
 
     @TableId(value = "id", type = IdType.ID_WORKER)//使用的是雪花算法的策略来生成ID
+    //现在需要改变他的默认的转换的机制（行为） 我自己定义的类 他的内部机制（将long的数据转成STRING）
+   // @JsonSerialize(using = Long2StringSerializer.class)
     private Long id;
 
     @ApiModelProperty(value = "标题")

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.article.mapper.ApArticleMapper">
+    <select id="pageByOrder" resultType="com.itheima.article.pojo.ApArticle" parameterType="map">
+        select apa.* from ap_article apa left join ap_article_config aac on apa.id = aac.article_id
+        <where>
+        <if test="channelId!=null and channelId!=0">
+            and apa.channel_id=#{channelId}
+        </if>
+
+            and aac.is_delete=0
+            and aac.is_down=0
+        </where>
+        order by publish_time desc
+        limit #{start},#{size}
+    </select>
+    <select id="selectArticleCount" resultType="java.lang.Long" parameterType="integer">
+        select count(*) from ap_article apa left join ap_article_config aac on apa.id = aac.article_id
+        <where>
+            <if test="channelId!=null and channelId!=0">
+                and apa.channel_id=#{channelId}
+            </if>
+
+            and aac.is_delete=0
+            and aac.is_down=0
+        </where>
+
+    </select>
+</mapper>

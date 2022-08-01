@@ -27,6 +27,8 @@ mybatis-plus:
   global-config:
     datacenter-id: 1
     worker-id: 1
+logging:
+  level.com.itheima: debug
 ---
 server:
   port: 9003

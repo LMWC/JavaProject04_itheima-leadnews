@@ -1,5 +1,7 @@
 package com.itheima.user.service;
 
+import com.itheima.common.exception.LeadNewsException;
+import com.itheima.user.dto.UserRelationDto;
 import com.itheima.user.pojo.ApUserFollow;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ApUserFollowService extends IService<ApUserFollow> {
 
+
+    void follow(UserRelationDto userRelationDto) throws LeadNewsException;
 }

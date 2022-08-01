@@ -2,6 +2,9 @@ package com.itheima.article.mapper;
 
 import com.itheima.article.pojo.ApArticle;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-12-22
  */
 public interface ApArticleMapper extends BaseMapper<ApArticle> {
+
+    List<ApArticle> pageByOrder(@Param("channelId") Integer channelId,
+                                @Param("start") Long start,
+                                @Param("size") Long size);
+
+    Long selectArticleCount(@Param("channelId")Integer channelId);
 
 }

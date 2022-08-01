@@ -7,6 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+//项目： 做出来--》拥有这个知识+知识 html
+// 分阶段 总结梳理 代码理解到行即可  已知的代码可以CV(理解的区CV) 环境的东西
+
+
 @Configuration
 public class XxlJobConfig {
     private Logger logger = LoggerFactory.getLogger(XxlJobConfig.class);

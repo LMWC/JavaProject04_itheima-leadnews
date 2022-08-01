@@ -96,6 +96,9 @@ public class WmNewsController extends AbstractCoreController<WmNews> {
 
     }
 
+    //上架 和下架  1  service中 调用 mapper update wm_news set enable=1 where id=?
+    //   2.远程feign调用文章微服务  将状态值 给文章微服务 更新自己的表 和eanble的值进行同步。
+
     @GetMapping("/list/{status}")
     public List<WmNews> findByStatus(@PathVariable(name = "status") Integer status) {
         //select * from biao where status = ?

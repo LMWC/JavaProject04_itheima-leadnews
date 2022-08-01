@@ -15,7 +15,8 @@ public enum StatusCode {
     PARAM_ERROR(40000, "参数异常"),
     NOT_FOUND(40004, "资源不存在"),
     FAILURE(50000, "系统异常"),
-    CUSTOM_FAILURE(50001, "自定义异常错误");
+    CUSTOM_FAILURE(50001, "自定义异常错误"),
+    NEED_LOGIN(50002,"需要登录");
     private final Integer code;
 
     private final String message;

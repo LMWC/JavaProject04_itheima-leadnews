@@ -13,6 +13,7 @@
     <modules>
         <module>itheima-leadnews-gateway-admin</module>
         <module>itheima-leadnews-gateway-media</module>
+        <module>itheima-leadnews-gateway-app</module>
     </modules>
     <packaging>pom</packaging>
 

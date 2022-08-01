@@ -1,5 +1,8 @@
 package com.itheima.user.service;
 
+import com.itheima.common.exception.LeadNewsException;
+import com.itheima.common.util.au.TokenJsonVo;
+import com.itheima.user.dto.LoginDto;
 import com.itheima.user.pojo.ApUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ApUserService extends IService<ApUser> {
 
+
+    TokenJsonVo login(LoginDto loginDto) throws LeadNewsException;
 }
