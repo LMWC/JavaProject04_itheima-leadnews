@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: dev
+---
+server:
+  port: 9009
+spring:
+  application:
+    name: leadnews-sync
+  profiles: dev
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.211.136:3306/leadnews_article?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  cloud:
+    nacos:
+      server-addr: 192.168.211.136:8848
+      discovery:
+        server-addr: ${spring.cloud.nacos.server-addr}
+  redis:
+    host: 192.168.211.136
+    port: 6379
+  elasticsearch:
+    rest:
+      uris:
+        - http://192.168.211.136:9200
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.itheima.search.pojo

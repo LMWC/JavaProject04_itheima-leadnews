@@ -19,6 +19,8 @@
         <module>itheima-leadnews-service-wemedia</module>
         <module>itheima-leadnews-service-dfs</module>
         <module>itheima-leadnews-service-behaviour</module>
+        <module>itheima-leadnews-service-search</module>
+        <module>itheima-leadnews-service-sync</module>
     </modules>
     <dependencies>
         <dependency>

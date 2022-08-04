@@ -19,6 +19,7 @@
         <module>itheima-leadnews-wemedia-api</module>
         <module>itheima-leadnews-dfs-api</module>
         <module>itheima-leadnews-behaviour-api</module>
+        <module>itheima-leadnews-search-api</module>
     </modules>
 
     <dependencies>
