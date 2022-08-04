@@ -1,10 +1,14 @@
 package com.itheima.article.service;
 
+import com.itheima.article.dto.ArticleBehaviourDtoQuery;
 import com.itheima.article.dto.ArticleInfoDto;
 import com.itheima.article.pojo.ApArticle;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itheima.common.exception.LeadNewsException;
 import com.itheima.common.pojo.PageInfo;
 import com.itheima.common.pojo.PageRequestDto;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -24,4 +28,7 @@ public interface ApArticleService extends IService<ApArticle> {
 
 
     ArticleInfoDto detailByArticleId(Long articleId);
+
+
+    Map<String, Object> loadArticleBehaviour(ArticleBehaviourDtoQuery dtoQuery) throws LeadNewsException;
 }

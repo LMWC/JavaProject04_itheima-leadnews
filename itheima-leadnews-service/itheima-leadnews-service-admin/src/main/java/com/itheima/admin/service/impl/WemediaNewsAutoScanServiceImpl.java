@@ -200,6 +200,16 @@ public class WemediaNewsAutoScanServiceImpl implements WemediaNewsAutoScanServic
 
         //3.自己审核敏感词
         //从数据库查询所有的敏感词 初始化一颗树
+
+
+        /*Map tree = redisTemplate.find();
+        if(tree){
+            //直接使用 tree进行查询
+        }else{
+            //从数据库查到了之后 再设置到redis
+            redisTempalte.insert(tree);
+        }*/
+
         List<String> adSensitives = adSensitiveMapper.selectAdSensitive();
         SensitiveWordUtil.initMap(adSensitives);
         //查询文章的内容是否在这棵树里面存在 如果存在 有敏感词 返回BLOCK

@@ -1,0 +1,80 @@
+spring:
+  profiles:
+    active: dev
+---
+server:
+  port: 9006
+spring:
+  profiles: dev
+  application:
+    name: leadnews-behaviour
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.211.136:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.211.136:3306/leadnews_behaviour?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  kafka:
+    # 配置连接到服务端集群的配置项 ip:port,ip:port
+    bootstrap-servers: 192.168.211.136:9092
+    consumer:
+      auto-offset-reset: earliest
+      group-id: behaviour-consumer-group
+      # 默认值即为字符串
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # 默认值即为字符串
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.itheima.behaviour.pojo
+logging:
+  level.com: debug
+
+---
+server:
+  port: 9006
+spring:
+  profiles: test
+  application:
+    name: leadnews-behaviour
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.211.136:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.211.136:3306/leadnews_behaviour?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.itheima.behaviour.pojo
+---
+server:
+  port: 9006
+spring:
+  profiles: pro
+  application:
+    name: leadnews-behaviour
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.211.136:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.211.136:3306/leadnews_behaviour?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+# 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.itheima.behaviour.pojo

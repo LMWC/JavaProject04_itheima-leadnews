@@ -1,9 +1,12 @@
 package com.itheima.user.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itheima.article.feign.ApAuthorFeign;
 import com.itheima.article.pojo.ApAuthor;
+import com.itheima.behaviour.dto.FollowBehaviorDto;
+import com.itheima.common.constants.BusinessConstants;
 import com.itheima.common.exception.LeadNewsException;
 import com.itheima.common.pojo.Result;
 import com.itheima.common.pojo.StatusCode;
@@ -17,6 +20,7 @@ import com.itheima.user.mapper.ApUserFollowMapper;
 import com.itheima.user.service.ApUserFollowService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +45,9 @@ public class ApUserFollowServiceImpl extends ServiceImpl<ApUserFollowMapper, ApU
 
     @Autowired
     private ApAuthorFeign apAuthorFeign;
+
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
 
 
     //根据前端来的操作类型 添加数据或者删除数据（2个表） 张飞 关注了 貂蝉
@@ -90,6 +97,18 @@ public class ApUserFollowServiceImpl extends ServiceImpl<ApUserFollowMapper, ApU
             apUserFan.setIsShieldLetter(1);
             apUserFan.setIsShieldComment(1);
             apUserFanMapper.insert(apUserFan);
+
+            //发送消息
+            try {
+                FollowBehaviorDto followBehaviorDto = new FollowBehaviorDto();
+                followBehaviorDto.setArticleId(userRelationDto.getArticleId());
+                followBehaviorDto.setUserId(userTokenInfo.getUserId().intValue());
+                followBehaviorDto.setFollowId(apAuthor.getUserId());
+                kafkaTemplate.send(BusinessConstants.MqConstants.FOLLOW_BEHAVIOR_TOPIC, JSON.toJSONString(followBehaviorDto));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } else {
             //删除
             QueryWrapper<ApUserFan> queryWrapper1 = new QueryWrapper<>();

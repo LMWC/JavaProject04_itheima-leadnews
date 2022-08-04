@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 @MapperScan(basePackages = "com.itheima.article.mapper")//扫描mapper接口所在的包即可
 @EnableDiscoveryClient//启用注册与发现
+@EnableFeignClients(basePackages = "com.itheima.*.feign")
 public class ArticleApplication {
     public static void main(String[] args) {
         SpringApplication.run(ArticleApplication.class,args);

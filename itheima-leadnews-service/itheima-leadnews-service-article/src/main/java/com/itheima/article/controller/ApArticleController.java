@@ -1,9 +1,11 @@
 package com.itheima.article.controller;
 
 
+import com.itheima.article.dto.ArticleBehaviourDtoQuery;
 import com.itheima.article.dto.ArticleInfoDto;
 import com.itheima.article.pojo.ApArticle;
 import com.itheima.article.service.ApArticleService;
+import com.itheima.common.exception.LeadNewsException;
 import com.itheima.common.pojo.PageInfo;
 import com.itheima.common.pojo.PageRequestDto;
 import com.itheima.common.pojo.Result;
@@ -14,6 +16,7 @@ import io.swagger.annotations.Api;
 import com.itheima.core.controller.AbstractCoreController;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
 * <p>
@@ -58,6 +61,15 @@ public class ApArticleController extends AbstractCoreController<ApArticle> {
     public Result<ArticleInfoDto> detailByArticleId(@PathVariable(name="articleId") Long articleId){
         ArticleInfoDto articleInfoDto =  apArticleService.detailByArticleId(articleId);
         return Result.ok(articleInfoDto);
+    }
+
+
+    //获取文章是否点赞 是否收藏 是否关注 等信息展示 JSON
+    //{"isfollow":true,"islike":true,"isunlike":false,"iscollection":true}
+    @PostMapping("/load/article/behavior")
+    public Result<Map<String,Object>> loadArticleBehaviour(@RequestBody ArticleBehaviourDtoQuery dtoQuery) throws LeadNewsException {
+       Map<String,Object> map =  apArticleService.loadArticleBehaviour(dtoQuery);
+       return Result.ok(map);
     }
 
 }

@@ -2,6 +2,7 @@ package com.itheima.user.dto;
 
 import lombok.Data;
 
+//尽量要扩展性强 平衡
 @Data
 public class UserRelationDto {
 

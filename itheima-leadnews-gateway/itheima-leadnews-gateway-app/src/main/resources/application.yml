@@ -40,6 +40,13 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix= 1
+        # 行为微服务
+        - id: behaviour
+          uri: lb://leadnews-behaviour
+          predicates:
+            - Path=/behaviour/**
+          filters:
+            - StripPrefix= 1
 ---
 server:
   port: 6003

@@ -10,4 +10,9 @@ public class SystemConstants {
 
     public static final String USER_HEADER_NAME = "userId";
 
+
+    public static final Integer TYPE_USER = 1;//用户
+
+    public static final Integer TYPE_E = 0;//设备
+
 }

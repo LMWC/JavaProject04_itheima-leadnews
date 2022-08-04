@@ -50,6 +50,18 @@ public class SensitiveWordUtil {
         dictionaryMap = map;
     }
 
+    //增加一个
+   // public void insert(String xxx){}
+   //删除一个
+   // public void delete(String xxx){}
+    //更新一个
+   // public void update(String xxx){}
+
+    //清空这棵树
+    public static void clear(){
+        dictionaryMap.clear();
+    }
+
     /**
      * 搜索文本中某个文字是否匹配关键词
      * @param text

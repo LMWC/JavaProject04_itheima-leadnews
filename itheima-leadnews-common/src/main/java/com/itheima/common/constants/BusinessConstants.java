@@ -22,6 +22,10 @@ public interface BusinessConstants {
          * 文章自动审核
          */
         public static final String WM_NEWS_AUTO_SCAN_TOPIC = "wm.news.auto.scan.topic";
+        /**
+         * 行为关注TOPIC
+         */
+        public static final String FOLLOW_BEHAVIOR_TOPIC="follow.behavior.topic";
 
     }
 
