@@ -3,7 +3,10 @@ package com.itheima.search.service.impl;
 import com.itheima.common.pojo.PageInfo;
 import com.itheima.search.document.ArticleInfoDocument;
 import com.itheima.search.dto.SearchDto;
+import com.itheima.search.service.ApAssociateWordsService;
+import com.itheima.search.service.ApUserSearchService;
 import com.itheima.search.service.ArticleInfoDocumentSearchService;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -23,12 +26,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service//注册
+@Slf4j
 public class ArticleInfoDocumentSearchServiceImpl implements ArticleInfoDocumentSearchService {
     @Autowired
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
+    @Autowired
+    private ApUserSearchService apUserSearchService;
+
     @Override
     public PageInfo<ArticleInfoDocument> search(SearchDto searchDto) {
+
+
 
         //1.获取页面传递的关键字
         String keywords = searchDto.getKeywords();
@@ -36,6 +45,14 @@ public class ArticleInfoDocumentSearchServiceImpl implements ArticleInfoDocument
             //2.判断关键字是否为null 如果为null 设置一个默认值 黑马
             keywords = "黑马";
         }
+
+        //异步存储到redis中存储5条
+        try {
+            apUserSearchService.addUserSearch(searchDto.getEquipmentId().toString(),searchDto.getKeywords());
+        } catch (Exception e) {
+            log.error("搜索的时候记录搜索的时候报错了");
+        }
+
         //3. 创建查询对象 的构建对象
         NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
 

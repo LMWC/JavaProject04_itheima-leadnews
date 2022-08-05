@@ -1,5 +1,6 @@
 package com.itheima.article.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.itheima.article.dto.ArticleBehaviourDtoQuery;
@@ -8,12 +9,14 @@ import com.itheima.article.mapper.*;
 import com.itheima.article.pojo.*;
 import com.itheima.article.service.ApArticleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.itheima.article.vo.ArticleRedisVo;
 import com.itheima.behaviour.feign.ApBehaviorEntryFeign;
 import com.itheima.behaviour.feign.ApLikesBehaviorFeign;
 import com.itheima.behaviour.feign.ApUnlikesBehaviorFeign;
 import com.itheima.behaviour.pojo.ApBehaviorEntry;
 import com.itheima.behaviour.pojo.ApLikesBehavior;
 import com.itheima.behaviour.pojo.ApUnlikesBehavior;
+import com.itheima.common.constants.BusinessConstants;
 import com.itheima.common.constants.SystemConstants;
 import com.itheima.common.exception.LeadNewsException;
 import com.itheima.common.pojo.PageInfo;
@@ -22,12 +25,15 @@ import com.itheima.common.util.RequestContextUtil;
 import com.itheima.user.feign.ApUserFollowFeign;
 import com.itheima.user.pojo.ApUserFollow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.itheima.common.util.RequestContextUtil.getUserId;
 
@@ -156,67 +162,141 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     private ApCollectionMapper collectionMapper;
 
     @Override
-    public Map<String, Object> loadArticleBehaviour(ArticleBehaviourDtoQuery dtoQuery)throws LeadNewsException {
+    public Map<String, Object> loadArticleBehaviour(ArticleBehaviourDtoQuery dtoQuery) throws LeadNewsException {
         //1.定义变量
-        Map<String,Object> resultMap = new HashMap<>();
-        resultMap.put("isfollow",false);
-        resultMap.put("islike",false);
-        resultMap.put("isunlike",false);
-        resultMap.put("iscollection",false);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("isfollow", false);
+        resultMap.put("islike", false);
+        resultMap.put("isunlike", false);
+        resultMap.put("iscollection", false);
         boolean anonymous = RequestContextUtil.isAnonymous();
         Integer userId = getUserId();
         ApAuthor apAuthor = apAuthorMapper.selectById(dtoQuery.getAuthorId());
-        if(apAuthor==null){
+        if (apAuthor == null) {
             throw new LeadNewsException("不存在的作者");
         }
         //2.通过feign调用查询 行为实体
         ApBehaviorEntry entry = null;
-        if(anonymous) {
+        if (anonymous) {
             entry = apBehaviorEntryFeign.findByUserIdOrEquipmentId(dtoQuery.getEquipmentId(), SystemConstants.TYPE_E);
-        }else{
+        } else {
             entry = apBehaviorEntryFeign.findByUserIdOrEquipmentId(userId, SystemConstants.TYPE_USER);
         }
-        if(entry==null){
+        if (entry == null) {
             return resultMap;
         }
 
-        Integer entryId= entry.getId();
+        Integer entryId = entry.getId();
         //3.查询是否关注  查询是否喜欢  查询是否收藏  查询是否点赞
         //3.1 通过feign调用查询 是否喜欢
         ApUnlikesBehavior unlikesBehavior = apUnlikesBehaviorFeign.getUnlikesBehavior(dtoQuery.getArticleId(), entryId);
-        if(unlikesBehavior!=null && unlikesBehavior.getType()==0){
-            resultMap.put("isunlike",true);
+        if (unlikesBehavior != null && unlikesBehavior.getType() == 0) {
+            resultMap.put("isunlike", true);
         }
 
         //3.2 通过feign调用查询 是否点赞
 
         ApLikesBehavior likesBehavior = apLikesBehaviorFeign.getLikesBehavior(dtoQuery.getArticleId(), entryId);
-        if(likesBehavior!=null && likesBehavior.getOperation()==1){
-            resultMap.put("islike",true);
+        if (likesBehavior != null && likesBehavior.getOperation() == 1) {
+            resultMap.put("islike", true);
         }
 
         //3.3 通过feign调用查询 是否关注
-        if(!anonymous){
+        if (!anonymous) {
             // 远程调用 根据 user_id(当前的登录的用户的ID) 和 follow_id（作者对应的app_user表的id）查询
             //根据页面传递过来的author_id 查询user_id
-            Integer followId=apAuthor.getUserId();
+            Integer followId = apAuthor.getUserId();
             ApUserFollow apUserFollow = apUserFollowFeign.getApUserFollow(followId, userId);
-            if(apUserFollow!=null){
-                resultMap.put("isfollow",true);
+            if (apUserFollow != null) {
+                resultMap.put("isfollow", true);
             }
         }
         //3.4 查询是否收藏
 
-        QueryWrapper<ApCollection> queryWrapper= new QueryWrapper<>();
-        queryWrapper.eq("entry_id",entryId);
-        queryWrapper.eq("article_id",dtoQuery.getArticleId());
+        QueryWrapper<ApCollection> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("entry_id", entryId);
+        queryWrapper.eq("article_id", dtoQuery.getArticleId());
         ApCollection apCollection = collectionMapper.selectOne(queryWrapper);
-        if(apCollection!=null){
-            resultMap.put("iscollection",true);
+        if (apCollection != null) {
+            resultMap.put("iscollection", true);
         }
 
         //4.获取之后组合map 返回即可,返回的数据格式如下：
         //  {"isfollow":true,"islike":true,"isunlike":false,"iscollection":true}
         return resultMap;
+    }
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+
+    @Override
+    public void saveToRedis() {
+        //1.从数据库中查询前5天的文章的数据
+        LocalDateTime startTime = LocalDateTime.now().minusDays(5);
+
+        List<ApArticle> apArticles = apArticleMapper.selectRedisVoList(startTime);
+        //2.计算分值 文章的分值
+        if (apArticles != null && apArticles.size() > 0) {
+            for (ApArticle apArticle : apArticles) {
+                //算出分值
+                Integer score = computeScore(apArticle);
+                //3.将其数据存储到redis中 (30条)  key? value? zset
+                //key:频道ID 因为将来页面需要根据频道ID 获取热点文章列表
+                //value:文章的内容转成JSON 存储起来
+                ArticleRedisVo articleRedisVo = JSON.parseObject(JSON.toJSONString(apArticle), ArticleRedisVo.class);
+
+                stringRedisTemplate
+                        .opsForZSet().add(
+                                BusinessConstants.ArticleConstants.HOT_ARTICLE_FIRST_PAGE+
+                        apArticle.getChannelId(),
+                        JSON.toJSONString(articleRedisVo),
+                        score);
+                //默认频道的ID 是0  默认频道的数据
+                stringRedisTemplate
+                        .opsForZSet().add(
+                        BusinessConstants.ArticleConstants.HOT_ARTICLE_FIRST_PAGE+
+                                BusinessConstants.ArticleConstants.DEFAULT_TAG,
+                        JSON.toJSONString(articleRedisVo),
+                        score);
+            }
+
+            //截取 只保留30条 移除 0 到 倒数第31个数据 保留最后30条数据
+
+            List<Integer> channelIds = apArticles.stream().map(p -> p.getChannelId()).collect(Collectors.toList());
+
+            if(channelIds!=null) {
+                for (Integer channelId : channelIds) {
+                    stringRedisTemplate
+                            .opsForZSet().removeRange(BusinessConstants.ArticleConstants.HOT_ARTICLE_FIRST_PAGE +
+                            channelId, 0, -31);
+                }
+            }
+
+
+            stringRedisTemplate
+                    .opsForZSet().removeRange(
+                    BusinessConstants.ArticleConstants.HOT_ARTICLE_FIRST_PAGE+
+                            BusinessConstants.ArticleConstants.DEFAULT_TAG,
+                    0,-31);
+        }
+    }
+
+    private Integer computeScore(ApArticle apArticle) {
+        Integer score = 0;
+        if (apArticle.getLikes() != null) {
+            score += apArticle.getLikes() * BusinessConstants.ArticleConstants.HOT_ARTICLE_LIKE_WEIGHT;
+        }
+        if (apArticle.getCollection() != null) {
+            score += apArticle.getCollection() * BusinessConstants.ArticleConstants.HOT_ARTICLE_COLLECTION_WEIGHT;
+        }
+        if (apArticle.getComment() != null) {
+            score += apArticle.getComment() * BusinessConstants.ArticleConstants.HOT_ARTICLE_COMMENT_WEIGHT;
+        }
+
+        if (apArticle.getViews() != null) {
+            score += apArticle.getViews();
+        }
+        return score;
     }
 }

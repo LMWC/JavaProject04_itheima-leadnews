@@ -1,10 +1,12 @@
 package com.itheima.search.task;
 
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @Component
@@ -14,7 +16,6 @@ public class TestTask {
     public void zhixing(){
         //业务逻辑
         System.out.println( new Date());
-
 
         //实现分页查询
 
@@ -36,5 +37,9 @@ public class TestTask {
                 //执行某一个业务
             }
         }).start();*/
+    }
+
+    public Future<String> task1(){
+        return new AsyncResult("数据");
     }
 }

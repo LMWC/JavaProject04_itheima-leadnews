@@ -31,4 +31,9 @@ public interface ApArticleService extends IService<ApArticle> {
 
 
     Map<String, Object> loadArticleBehaviour(ArticleBehaviourDtoQuery dtoQuery) throws LeadNewsException;
+
+    /**
+     * 业务逻辑方法
+     */
+    void saveToRedis();
 }

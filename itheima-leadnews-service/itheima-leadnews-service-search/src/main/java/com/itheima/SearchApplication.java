@@ -1,7 +1,10 @@
 package com.itheima;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.itheima.search.mapper.ApAssociateWordsMapper;
+import com.itheima.search.pojo.ApAssociateWords;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +12,10 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.trie4j.patricia.PatriciaTrie;
 
+import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @SpringBootApplication
@@ -19,11 +25,35 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class SearchApplication {
     public static void main(String[] args) {
         SpringApplication.run(SearchApplication.class,args);
+
     }
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
     }
+
+
+    @Autowired
+    private ApAssociateWordsMapper apAssociateWordsMapper;
+
+    @Autowired
+    private PatriciaTrie patriciaTrie;
+
+    //这个方法在系统启动的时候调用一次就可以了
+    @PostConstruct//注解的作用就是当 该SearchApplication对象 被spring容器创建出来的时候会自动调用修饰的方法 调用一次
+    public void initMethod(){
+
+        List<ApAssociateWords> apAssociateWords = apAssociateWordsMapper.selectList(null);
+        for (ApAssociateWords apAssociateWord : apAssociateWords) {
+            patriciaTrie.insert(apAssociateWord.getAssociateWords());
+        }
+    }
+
+    @Bean
+    public PatriciaTrie patriciaTrie(){
+        return new PatriciaTrie();
+    }
+
 
     //自定义线程池的配置
     @Bean(name = "taskExecutor")

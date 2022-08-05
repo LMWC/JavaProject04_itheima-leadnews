@@ -5,10 +5,13 @@ import com.itheima.common.pojo.Result;
 import com.itheima.search.document.ArticleInfoDocument;
 import com.itheima.search.dto.SearchDto;
 
+import com.itheima.search.service.ApUserSearchService;
 import com.itheima.search.service.ArticleInfoDocumentSearchService;
 import com.itheima.search.task.BussinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/article")
@@ -20,6 +23,14 @@ public class SearchController {
     public Result<PageInfo<ArticleInfoDocument>> search(@RequestBody SearchDto searchDto){
         PageInfo<ArticleInfoDocument> pageInfo = searchService.search(searchDto);
         return Result.ok(pageInfo);
+    }
+
+    @Autowired
+    private ApUserSearchService apUserSearchService;
+    //find?eqId=
+    @GetMapping("/find/{eqId}")
+    public Set<String> findFromRedis(@PathVariable(name="eqId") Integer eqId){
+        return apUserSearchService.findByEqId(eqId);
     }
 
 

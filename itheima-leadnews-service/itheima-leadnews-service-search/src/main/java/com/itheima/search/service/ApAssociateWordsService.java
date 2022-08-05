@@ -1,7 +1,10 @@
 package com.itheima.search.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itheima.search.dto.SearchDto;
 import com.itheima.search.pojo.ApAssociateWords;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,6 @@ import com.itheima.search.pojo.ApAssociateWords;
  */
 public interface ApAssociateWordsService extends IService<ApAssociateWords> {
 
+
+    List<String> searchTen(SearchDto searchDto);
 }

@@ -45,4 +45,34 @@ public interface BusinessConstants {
         public static final String REVIEW="review";
 
     }
+    public static class ArticleConstants{
+        public static final Short LOADTYPE_LOAD_MORE = 1;
+        public static final Short LOADTYPE_LOAD_NEW = 2;
+        /**
+         * 默认频道
+         */
+        public static final String DEFAULT_TAG = "0";
+
+        /**
+         * 点赞
+         */
+        public static final Integer HOT_ARTICLE_LIKE_WEIGHT = 3;
+
+        /**
+         * 评论
+         */
+        public static final Integer HOT_ARTICLE_COMMENT_WEIGHT = 5;
+
+        /**
+         * 收藏
+         */
+        public static final Integer HOT_ARTICLE_COLLECTION_WEIGHT = 8;
+
+
+        /**
+         * 热点文章的前缀
+         */
+        public static final String HOT_ARTICLE_FIRST_PAGE = "hot_article_first_page_";
+
+    }
 }
